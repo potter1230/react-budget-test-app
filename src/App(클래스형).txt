@@ -1,0 +1,79 @@
+import { Component } from "react";
+import "./App.css";
+import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
+
+class App extends Component {
+
+  // initialExpenses 데이터를 state로 만들기
+  // 자 이렇게 데이터를 변경하면
+  // props로 전달한 방식도 바뀜
+  constructor(props) {
+    // super 사용은 이게 문법임
+    // 간단히 말해 super는 부모의 값을 상속하여 사용하는 건데
+    // React.Component에서 props라는 값이 정의 되엇고
+    // 이를 사용하기 위해 super 메서드를 사용해 상속받는다
+    // 뭐 간단히 말해 그런 개념
+    super(props)
+    this.state = {
+      expenses: [
+        { id: 1, charge: '렌트비', amount: 1600 },
+        { id: 2, charge: '교통비', amount: 400 },
+        { id: 3, charge: '식비', amount: 1200 }
+      ]
+    }
+  }
+
+  // ExpenseItem에 전달해줄 데이터 (props)
+  // props는 읽기 전용
+  /*
+  initialExpenses = [
+    { id: 1, charge: '렌트비', amount: 1600 },
+    { id: 2, charge: '교통비', amount: 400 },
+    { id: 3, charge: '식비', amount: 1200 }
+  ]
+  */
+  // clear-btn 누르면 initialExpenses 데이터 삭제 함수
+  handleDelete = id => {
+    // console.log(id)
+    // const newExpenses = this.initialExpenses.filter(expense => 
+    const newExpenses = this.state.expenses.filter(expense => 
+      expense.id !== id
+    )
+    console.log(newExpenses)
+    // 이렇게 새롭게 return된 배열을 state에 적용해서 re-rendering하려면 setState라는 함수 사용
+    this.setState({expenses: newExpenses})
+  } 
+
+  render() {
+    return (
+      <main className="main-container">
+        <h1>예산 계산기</h1>
+
+        <div style={{ width: '100%', backgroundColor: 'white', padding: '1rem' }}>
+          { /* Expense Form */ }
+          <ExpenseForm />
+        </div>
+
+        <div style={{ width: '100%', backgroundColor: 'white', padding: '1rem' }}>
+          { /* Expense List */ }
+          { /* initialExpenses props 데이터 전달 */ }
+          <ExpenseList 
+            /*initialExpenses = {this.initialExpenses}*/
+            initialExpenses = {this.state.expenses}
+            handleDelete = {this.handleDelete}
+          />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'end', marginTop: '1rem' }}>
+          <p style={{ fontSize: '2rem' }}>
+            총지출:
+            <span>원</span>
+          </p>
+        </div>
+      </main>
+    )
+  }
+}
+
+export default App
